@@ -55,6 +55,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Commands\OnDetailCommand.cs" />
+    <Compile Include="Commands\OnSearchCommand.cs" />
+    <Compile Include="Models\CryptoDetailModel.cs" />
+    <Compile Include="Models\SearchCryptoModel.cs" />
+    <Compile Include="Stores\NavigationStore.cs" />
+    <Compile Include="ViewModels\CryptoDetailViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SearchCryptoViewModel.cs" />
+    <Compile Include="ViewModels\TopCryptoViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\CryptoDetailView.xaml.cs">
+      <DependentUpon>CryptoDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchCryptoView.xaml.cs">
+      <DependentUpon>SearchCryptoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TopCryptoView.xaml.cs">
+      <DependentUpon>TopCryptoView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,8 +88,21 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CryptoDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchCryptoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TopCryptoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\TopCryptoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,5 +128,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
