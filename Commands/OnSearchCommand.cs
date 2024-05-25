@@ -21,7 +21,7 @@ namespace coinA.Commands
 
         public override void Execute(object parameter)
         {
-            var searchViewModel = new SearchCryptoViewModel();
+            var searchViewModel = new SearchCryptoViewModel(_navigationStore);
             searchViewModel.SearchText = _topCryptoViewModel.SearchText;
 
             var navigateCommand = new NavigateCommand(_navigationStore, searchViewModel);

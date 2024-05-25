@@ -1,4 +1,5 @@
-﻿using coinA.Stores;
+﻿using coinA.Models;
+using coinA.Stores;
 using coinA.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,18 @@ namespace coinA.Commands
 
         public override void Execute(object parameter)
         {
-            var navigateCommand = new NavigateCommand(_navigationStore, new CryptoDetailViewModel());
-
-            navigateCommand.Execute(parameter);
+            if (parameter is TopCryptoModel selectedCrypto )
+            {
+                var detailViewModel = new CryptoDetailViewModel(_navigationStore ,selectedCrypto.Id);
+                var navigateCommand = new NavigateCommand(_navigationStore, detailViewModel);
+                navigateCommand.Execute(parameter);
+            }
+            if (parameter is SearchCryptoModel selectedCrypto1)
+            {
+                var detailViewModel = new CryptoDetailViewModel(_navigationStore, selectedCrypto1.Id);
+                var navigateCommand = new NavigateCommand(_navigationStore, detailViewModel);
+                navigateCommand.Execute(parameter);
+            }
         }
     }
 }
