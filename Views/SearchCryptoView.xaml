@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:coinA.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -12,11 +13,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Поле для пошуку -->
+
         <TextBox Text= "{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="760" Height="30"/>
 
-        <!-- Результати пошуку -->
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10" ItemsSource="{Binding SearchResults}" AutoGenerateColumns="False">
+
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10" 
+                  ItemsSource="{Binding SearchResults}" AutoGenerateColumns="False">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding OnDetailCommand}" 
+                               CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Image">
                     <DataGridTemplateColumn.CellTemplate>
