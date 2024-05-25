@@ -1,10 +1,13 @@
-﻿using coinA.Models;
+﻿using coinA.Commands;
+using coinA.Models;
+using coinA.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace coinA.ViewModels
 {
@@ -35,17 +38,19 @@ namespace coinA.ViewModels
             }
         }
 
-        public SearchCryptoViewModel()
+        public ICommand OnDetailCommand { get; }
+
+        public SearchCryptoViewModel(NavigationStore navigationStore)
         {
-            // Ініціалізація колекції всіх криптовалют
+            OnDetailCommand = new OnDetailCommand(navigationStore);
+
             _allCryptos = new ObservableCollection<SearchCryptoModel>
         {
-            new SearchCryptoModel { Symbol = "btc", Name = "Bitcoin" , Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"},
-            new SearchCryptoModel { Symbol = "eth", Name = "Ethereum", Image = "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628" },
-            new SearchCryptoModel { Symbol = "xrp", Name = "Ripple", Image = "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png"},
+            new SearchCryptoModel { Id = "bitcoin", Symbol = "btc", Name = "Bitcoin" , Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"},
+            new SearchCryptoModel { Id = "ethereum", Symbol = "eth", Name = "Ethereum", Image = "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628" },
+            new SearchCryptoModel { Id = "ripple", Symbol = "xrp", Name = "Ripple", Image = "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png"},
         };
 
-            // Ініціалізація результатів пошуку пустою колекцією
             SearchResults = new ObservableCollection<SearchCryptoModel>();
         }
 

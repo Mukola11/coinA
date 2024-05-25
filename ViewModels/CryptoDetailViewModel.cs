@@ -7,11 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using coinA.Stores;
+using coinA.Commands;
 
 namespace coinA.ViewModels
 {
     public class CryptoDetailViewModel : ViewModelBase
     {
+        public string Id { get; }
+
+        public ICommand NavigateBackCommand { get; }
+
         private CryptoDetailModel cryptoDetail;
         public CryptoDetailModel CryptoDetail
         {
@@ -41,12 +48,14 @@ namespace coinA.ViewModels
             }
         }
 
-        public CryptoDetailViewModel()
+        public CryptoDetailViewModel(NavigationStore navigationStore, string id)
         {
+            NavigateBackCommand = new NavigateBackCommand(navigationStore);
+
             CryptoDetail = new CryptoDetailModel
             {
                 Name = "Bitcoin",
-                Symbol = "BTC",
+                Symbol = id,
                 Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
                 CurrentPrice = 40000.00m,
                 Volume = 15000000m,
@@ -67,6 +76,8 @@ namespace coinA.ViewModels
             };
 
             UpdatePriceChangePlot();
+
+            Id = id;
         }
 
         private void UpdatePriceChangePlot()
