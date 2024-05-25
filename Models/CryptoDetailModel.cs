@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace coinA.Models
 {
-    public class CryptoDetailModel : ViewModelBase
+    public class CryptoDetailModel
     {
         public string Name { get; set; }
         public string Symbol { get; set; }
