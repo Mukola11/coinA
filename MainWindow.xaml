@@ -1,12 +1,28 @@
-﻿<Window x:Class="coinA.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:coinA"
+        xmlns:views="clr-namespace:coinA.Views" 
+        xmlns:vms="clr-namespace:coinA.ViewModels"
+        x:Class="coinA.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:TopCryptoViewModel}">
+                <views:TopCryptoView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:SearchCryptoViewModel}">
+                <views:SearchCryptoView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:CryptoDetailViewModel}">
+                <views:CryptoDetailView/>
+            </DataTemplate>
+
+        </Grid.Resources>
+
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
