@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:coinA.Views"
+             xmlns:behaviors="clr-namespace:coinA.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,7 +15,12 @@
         </Grid.RowDefinitions>
 
 
-        <TextBox Text= "{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="760" Height="30"/>
+        <TextBox Text= "{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="760" Height="30">
+            <i:Interaction.Behaviors>
+                <behaviors:FocusBehavior />
+
+            </i:Interaction.Behaviors>
+        </TextBox>
 
 
         <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10" 

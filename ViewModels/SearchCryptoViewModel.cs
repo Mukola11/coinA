@@ -59,15 +59,8 @@ namespace coinA.ViewModels
 
         private async Task FilterSearchResultsAsync()
         {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                SearchResults.Clear();
-            }
-            else
-            {
-                var searchResults = await _cryptoApiService.SearchCryptosAsync(SearchText);
-                SearchResults = new ObservableCollection<SearchCryptoModel>(searchResults);
-            }
+            var searchResults = await _cryptoApiService.SearchCryptosAsync(SearchText);
+            SearchResults = new ObservableCollection<SearchCryptoModel>(searchResults);
         }
 
         private void ResetSearchTimer()
