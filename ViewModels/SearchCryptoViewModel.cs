@@ -1,21 +1,25 @@
 ﻿using coinA.Commands;
 using coinA.Models;
+using coinA.Services;
 using coinA.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 
 namespace coinA.ViewModels
 {
     public class SearchCryptoViewModel : ViewModelBase
     {
+        private readonly CryptoApiService _cryptoApiService;
         private string _searchText;
         private ObservableCollection<SearchCryptoModel> _searchResults;
-        private ObservableCollection<SearchCryptoModel> _allCryptos;
+        private System.Timers.Timer _searchTimer;
 
         public string SearchText
         {
@@ -24,7 +28,7 @@ namespace coinA.ViewModels
             {
                 _searchText = value;
                 OnPropertyChange(nameof(SearchText));
-                FilterSearchResults();
+                ResetSearchTimer();
             }
         }
 
@@ -42,32 +46,40 @@ namespace coinA.ViewModels
 
         public SearchCryptoViewModel(NavigationStore navigationStore)
         {
+            _cryptoApiService = new CryptoApiService();
             OnDetailCommand = new OnDetailCommand(navigationStore);
 
-            _allCryptos = new ObservableCollection<SearchCryptoModel>
-        {
-            new SearchCryptoModel { Id = "bitcoin", Symbol = "btc", Name = "Bitcoin" , Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"},
-            new SearchCryptoModel { Id = "ethereum", Symbol = "eth", Name = "Ethereum", Image = "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628" },
-            new SearchCryptoModel { Id = "ripple", Symbol = "xrp", Name = "Ripple", Image = "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png"},
-        };
-
             SearchResults = new ObservableCollection<SearchCryptoModel>();
+
+
+            _searchTimer = new System.Timers.Timer(1000); 
+            _searchTimer.AutoReset = false;
+            _searchTimer.Elapsed += OnSearchTimerElapsed;
         }
 
-        private void FilterSearchResults()
+        private async Task FilterSearchResultsAsync()
         {
             if (string.IsNullOrEmpty(SearchText))
             {
-                SearchResults = new ObservableCollection<SearchCryptoModel>(_allCryptos);
+                SearchResults.Clear();
             }
             else
             {
-                var filteredResults = _allCryptos
-                    .Where(c => c.Symbol.StartsWith(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                                c.Name.StartsWith(SearchText, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                SearchResults = new ObservableCollection<SearchCryptoModel>(filteredResults);
+                var searchResults = await _cryptoApiService.SearchCryptosAsync(SearchText);
+                SearchResults = new ObservableCollection<SearchCryptoModel>(searchResults);
             }
         }
+
+        private void ResetSearchTimer()
+        {
+            _searchTimer.Stop();
+            _searchTimer.Start();
+        }
+
+        private async void OnSearchTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            await FilterSearchResultsAsync();
+        }
+
     }
 }
