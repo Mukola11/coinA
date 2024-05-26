@@ -23,7 +23,7 @@
 
 
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10">
-            <Image Source="{Binding CryptoDetail.Image}" Width="100" Height="100" VerticalAlignment="Top"/>
+            <Image Source="{Binding CryptoDetail.Image.Large}" Width="100" Height="100" VerticalAlignment="Top"/>
             <StackPanel>
                 <TextBlock Text="{Binding CryptoDetail.Name}" FontSize="24" FontWeight="Bold"/>
                 <TextBlock Text="{Binding CryptoDetail.Symbol}" FontSize="18" Margin="0,5,0,0"/>
@@ -40,21 +40,23 @@
         <StackPanel Grid.Row="1" Grid.Column="0"  Orientation="Horizontal" Margin="10">
             <StackPanel Orientation="Vertical" Margin="0,0,20,0">
                 <TextBlock Text="Current Price:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding CryptoDetail.CurrentPrice}" FontSize="16" Margin="0,5,0,0"/>
+                <TextBlock Text="{Binding CryptoDetail.CurrentPriceUSD}" FontSize="16" Margin="0,5,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Volume:" FontWeight="Bold"/>
-                <TextBlock Text="{Binding CryptoDetail.Volume}" FontSize="16" Margin="0,5,0,0"/>
+                <TextBlock Text="{Binding CryptoDetail.VolumeUSD}" FontSize="16" Margin="0,5,0,0"/>
             </StackPanel>
         </StackPanel>
 
 
-        <ListBox ItemsSource="{Binding CryptoDetail.Markets}" Margin="10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <ListBox ItemsSource="{Binding CryptoDetail.Tickers}" Margin="10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" Width="100"/>
-                        <TextBlock Text="{Binding Price}" Width="100"/>
+                        <TextBlock Text="{Binding Market.Name}" Width="100"/>
+                        <TextBlock Text="{Binding Last}" Width="100"/>
+                        <TextBlock Text="{Binding MarketUrl}" Width="auto"/>
+                        
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
