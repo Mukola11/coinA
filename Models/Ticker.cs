@@ -9,6 +9,9 @@ namespace coinA.Models
 {
     public class Ticker
     {
+        [JsonProperty("base")]
+        public string Base { get; set; }
+
         [JsonProperty("market")]
         public Market Market { get; set; }
 

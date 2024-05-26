@@ -57,6 +57,11 @@ namespace coinA.Services
                     {
                         cryptoDetail.PriceChanges = priceChanges;
                     }
+                    if (cryptoDetail.Tickers != null)
+                    {
+                        cryptoDetail.Tickers.RemoveAll(ticker => ticker.Base.ToLower() != cryptoDetail.Symbol.ToLower());
+                    }
+
                 }
 
                 return cryptoDetail;
