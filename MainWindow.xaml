@@ -8,7 +8,11 @@
         xmlns:vms="clr-namespace:coinA.ViewModels"
         x:Class="coinA.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        Height="650" 
+        Width="950"
+        MinHeight="650"
+        MinWidth="950">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type vms:TopCryptoViewModel}">
