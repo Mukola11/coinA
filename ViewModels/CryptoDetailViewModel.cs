@@ -10,11 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using coinA.Stores;
 using coinA.Commands;
+using coinA.Services;
 
 namespace coinA.ViewModels
 {
     public class CryptoDetailViewModel : ViewModelBase
     {
+        private readonly CryptoApiService _cryptoApiService;
+
         public string Id { get; }
 
         public ICommand NavigateBackCommand { get; }
@@ -50,48 +53,55 @@ namespace coinA.ViewModels
 
         public CryptoDetailViewModel(NavigationStore navigationStore, string id)
         {
-            NavigateBackCommand = new NavigateBackCommand(navigationStore);
-
-            CryptoDetail = new CryptoDetailModel
-            {
-                Name = "Bitcoin",
-                Symbol = id,
-                Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
-                CurrentPrice = 40000.00m,
-                Volume = 15000000m,
-                Markets = new List<Market>
-                {
-                    new Market { Name = "Market 1", Price = 40000.00m },
-                    new Market { Name = "Market 2", Price = 40010.00m },
-                },
-                PriceChanges = new List<PriceChange>
-                {
-                    new PriceChange { Timestamp = DateTime.Now.AddHours(-5), Price = 39500.00m },
-                    new PriceChange { Timestamp = DateTime.Now.AddHours(-4), Price = 39600.00m },
-                    new PriceChange { Timestamp = DateTime.Now.AddHours(-3), Price = 39700.00m },
-                    new PriceChange { Timestamp = DateTime.Now.AddHours(-2), Price = 39800.00m },
-                    new PriceChange { Timestamp = DateTime.Now.AddHours(-1), Price = 39900.00m },
-                    new PriceChange { Timestamp = DateTime.Now, Price = 40000.00m },
-                }
-            };
-
-            UpdatePriceChangePlot();
-
+            _cryptoApiService = new CryptoApiService();
             Id = id;
+
+            NavigateBackCommand = new NavigateCommand(navigationStore, new TopCryptoViewModel(navigationStore));
+
+            _ = LoadCryptoDetailAsync(id);
+        }
+
+        private async Task LoadCryptoDetailAsync(string id)
+        {
+            CryptoDetail = await _cryptoApiService.GetCryptoDetailAsync(id);
         }
 
         private void UpdatePriceChangePlot()
         {
-            var plotModel = new PlotModel { Title = "Price Changes Over Time" };
-            var series = new LineSeries { MarkerType = MarkerType.Circle };
-
-            foreach (var priceChange in CryptoDetail.PriceChanges)
+            if (CryptoDetail?.PriceChanges != null && CryptoDetail.PriceChanges.Any())
             {
-                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(priceChange.Timestamp), (double)priceChange.Price));
-            }
+                var plotModel = new PlotModel { Title = "Price Changes Over Time" };
+                var dateAxis = new DateTimeAxis
+                {
+                    Position = AxisPosition.Bottom,
+                    StringFormat = "HH:mm",
+                    Title = "Time",
+                    IntervalType = DateTimeIntervalType.Hours,
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineStyle = LineStyle.Dot
+                };
+                plotModel.Axes.Add(dateAxis);
 
-            plotModel.Series.Add(series);
-            PriceChangePlotModel = plotModel;
+                var valueAxis = new LinearAxis
+                {
+                    Position = AxisPosition.Left,
+                    Title = "Price",
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineStyle = LineStyle.Dot
+                };
+                plotModel.Axes.Add(valueAxis);
+
+                var series = new LineSeries { MarkerType = MarkerType.Circle };
+
+                foreach (var priceChange in CryptoDetail.PriceChanges)
+                {
+                    var time = DateTimeOffset.FromUnixTimeMilliseconds(priceChange.Timestamp).DateTime;
+                    series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(time), (double)priceChange.Price));
+                }
+
+                plotModel.Series.Add(series);
+                PriceChangePlotModel = plotModel;
+            }
         }
     }
 }

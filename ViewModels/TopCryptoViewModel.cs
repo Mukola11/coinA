@@ -1,5 +1,6 @@
 ﻿using coinA.Commands;
 using coinA.Models;
+using coinA.Services;
 using coinA.Stores;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace coinA.ViewModels
 
     public class TopCryptoViewModel : ViewModelBase
     {
+        private readonly CryptoApiService _cryptoApiService;
+
         private string _searchText;
 
         private ObservableCollection<TopCryptoModel> _topCryptoModel;
@@ -56,30 +59,14 @@ namespace coinA.ViewModels
 
             OnDetailCommand = new OnDetailCommand(navigationStore);
 
-            TopCryptoModel = new ObservableCollection<TopCryptoModel>
-            {
-                new TopCryptoModel
-                {
-                    Id = "bitcoin",
-                    Symbol = "btc",
-                    Name = "Bitcoin",
-                    Image = "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
-                    CurrentPrice = 70005,
-                    MarketCap = 1379506765043,
-                    TotalVolume = 33785648257
-                },
-                new TopCryptoModel
-                {
-                    Id = "ethereum",
-                    Symbol = "eth",
-                    Name = "Ethereum",
-                    Image = "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
-                    CurrentPrice = 3742.31M,
-                    MarketCap = 450267431131,
-                    TotalVolume = 32803629327
-                }
+            _cryptoApiService = new CryptoApiService();
+            _ = LoadTopCryptoDataAsync();
+        }
 
-            };
+        private async Task LoadTopCryptoDataAsync()
+        {
+            var topCryptos = await _cryptoApiService.GetTopCryptosAsync();
+            TopCryptoModel = new ObservableCollection<TopCryptoModel>(topCryptos);
         }
 
 
