@@ -15,33 +15,42 @@
         </Grid.RowDefinitions>
 
 
-        <TextBox Text= "{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="760" Height="30">
+        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                 Width="760" Height="30"
+                 Margin="10,10,10,0">
             <i:Interaction.Behaviors>
                 <behaviors:FocusBehavior />
-
             </i:Interaction.Behaviors>
         </TextBox>
 
 
-        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,10" 
-                  ItemsSource="{Binding SearchResults}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" 
+          Margin="10,0,10,10"
+          ItemsSource="{Binding SearchResults}" 
+          AutoGenerateColumns="False"
+          RowHeight="40"
+          HeadersVisibility="None">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding OnDetailCommand}" 
-                               CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                   CommandParameter="{Binding SelectedItem, 
+                                   RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Image">
+                <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Image}" Width="50" Height="50" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Image}" Width="30" Height="30" Stretch="Uniform" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding Symbol}" VerticalAlignment="Center"/>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="ID" Binding="{Binding Symbol}" />
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </UserControl>

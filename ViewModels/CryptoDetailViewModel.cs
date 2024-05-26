@@ -11,6 +11,7 @@ using System.Windows.Input;
 using coinA.Stores;
 using coinA.Commands;
 using coinA.Services;
+using System.Diagnostics;
 
 namespace coinA.ViewModels
 {
@@ -21,6 +22,8 @@ namespace coinA.ViewModels
         public string Id { get; }
 
         public ICommand NavigateBackCommand { get; }
+
+        public ICommand OpenUrlCommand { get; }
 
         private CryptoDetailModel cryptoDetail;
         public CryptoDetailModel CryptoDetail
@@ -59,7 +62,10 @@ namespace coinA.ViewModels
             NavigateBackCommand = new NavigateCommand(navigationStore, new TopCryptoViewModel(navigationStore));
 
             _ = LoadCryptoDetailAsync(id);
+
+            OpenUrlCommand = new OpenUrlCommand();
         }
+
 
         private async Task LoadCryptoDetailAsync(string id)
         {
@@ -70,28 +76,35 @@ namespace coinA.ViewModels
         {
             if (CryptoDetail?.PriceChanges != null && CryptoDetail.PriceChanges.Any())
             {
-                var plotModel = new PlotModel { Title = "Price Changes Over Time" };
+                var plotModel = new PlotModel { Title = "Price change in 24 hours" };
+
                 var dateAxis = new DateTimeAxis
                 {
                     Position = AxisPosition.Bottom,
                     StringFormat = "HH:mm",
-                    Title = "Time",
                     IntervalType = DateTimeIntervalType.Hours,
                     MajorGridlineStyle = LineStyle.Solid,
-                    MinorGridlineStyle = LineStyle.Dot
+                    MajorGridlineColor = OxyColors.LightGray,
+                    MinorGridlineStyle = LineStyle.Dot,
+                    MinorGridlineColor = OxyColors.LightGray
                 };
                 plotModel.Axes.Add(dateAxis);
 
                 var valueAxis = new LinearAxis
                 {
                     Position = AxisPosition.Left,
-                    Title = "Price",
                     MajorGridlineStyle = LineStyle.Solid,
-                    MinorGridlineStyle = LineStyle.Dot
+                    MajorGridlineColor = OxyColors.LightGray,
+                    MinorGridlineStyle = LineStyle.Dot,
+                    MinorGridlineColor = OxyColors.LightGray
                 };
                 plotModel.Axes.Add(valueAxis);
 
-                var series = new LineSeries { MarkerType = MarkerType.Circle };
+                var series = new LineSeries
+                {
+                    Color = OxyColors.Red,
+                    StrokeThickness = 2
+                };
 
                 foreach (var priceChange in CryptoDetail.PriceChanges)
                 {
@@ -103,5 +116,7 @@ namespace coinA.ViewModels
                 PriceChangePlotModel = plotModel;
             }
         }
+
+
     }
 }
