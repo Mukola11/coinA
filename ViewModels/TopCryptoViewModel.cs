@@ -20,6 +20,20 @@ namespace coinA.ViewModels
 
         private string _searchText;
 
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChange(nameof(SearchText));
+                if (!string.IsNullOrEmpty(_searchText))
+                {
+                    OnSearchCommand.Execute(null);
+                }
+            }
+        }
+
         private ObservableCollection<TopCryptoModel> _topCryptoModel;
 
         public ObservableCollection<TopCryptoModel> TopCryptoModel
@@ -35,19 +49,22 @@ namespace coinA.ViewModels
             }
         }
 
-        public string SearchText
+        private bool _isDarkTheme;
+
+        public bool IsDarkTheme
         {
-            get => _searchText;
+            get { return _isDarkTheme; }
             set
             {
-                _searchText = value;
-                OnPropertyChange(nameof(SearchText));
-                if (!string.IsNullOrEmpty(_searchText))
+                if (_isDarkTheme != value)
                 {
-                    OnSearchCommand.Execute(null);
+                    _isDarkTheme = value;
+                    OnPropertyChange(nameof(IsDarkTheme));
                 }
             }
         }
+
+        public ICommand ToggleThemeCommand { get; }
 
         public ICommand OnSearchCommand { get; }
 
@@ -58,6 +75,8 @@ namespace coinA.ViewModels
             OnSearchCommand = new OnSearchCommand(navigationStore, this);
 
             OnDetailCommand = new OnDetailCommand(navigationStore);
+
+            ToggleThemeCommand = new ToggleThemeCommand(this);
 
             _cryptoApiService = new CryptoApiService();
             _ = LoadTopCryptoDataAsync();

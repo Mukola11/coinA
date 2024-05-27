@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:coinA.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10">
+    <Grid Background="{DynamicResource BackgroundBrush}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -20,7 +20,7 @@
 
         <TextBox x:Name="SearchBox" 
                  Grid.Column="0" 
-                 Margin="0,0,10,10" 
+                 Margin="10,10,0,0" 
                  Width="300"
                  HorizontalAlignment="Left" 
                  VerticalAlignment="Center"
@@ -31,7 +31,6 @@
                  FontFamily="Segoe UI">
             <TextBox.Style>
                 <Style TargetType="TextBox">
-                    <Setter Property="Background" Value="White" />
                     <Setter Property="BorderBrush" Value="#CCC" />
                     <Setter Property="BorderThickness" Value="1" />
                     <Style.Triggers>
@@ -42,7 +41,7 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="Background">
                                 <Setter.Value>
-                                    <VisualBrush Stretch="None" AlignmentX="Left" AlignmentY="Center">
+                                    <VisualBrush Stretch="None" AlignmentX="Left"  AlignmentY="Center">
                                         <VisualBrush.Visual>
                                             <TextBlock Text="Search..." Foreground="Gray" Margin="5,0,0,0"/>
                                         </VisualBrush.Visual>
@@ -56,24 +55,24 @@
         </TextBox>
 
         <ToggleButton x:Name="ToggleButton" 
-                      Grid.Column="1" 
-                      Height="30" 
-                      Width="100"
-                      HorizontalAlignment="Left" 
-                      VerticalAlignment="Center"
-                      Command="{Binding ToggleCommand}"
-                      Content="Toggle" 
-                      Margin="10,0,0,0"
-                      FontFamily="Segoe UI"
-                      FontSize="14"
-                      Background="#007ACC"
-                      Foreground="White"
-                      BorderBrush="#005A9E"
-                      BorderThickness="1"/>
+              Grid.Column="1" 
+              Height="30" 
+              Width="100"
+              HorizontalAlignment="Right" 
+              VerticalAlignment="Center"
+              Command="{Binding ToggleThemeCommand}" 
+              Content="Toggle Theme" 
+              Margin="0,0,10,0"
+              FontFamily="Segoe UI"
+              FontSize="14"
+              Background="#CCCCCC" 
+              Foreground="#333333"
+              BorderBrush="#CCCCCC"
+              BorderThickness="1"/>
 
-        <DataGrid Grid.Row="1" 
+            <DataGrid Grid.Row="1" 
           Grid.ColumnSpan="2" 
-          Margin="0,10,0,0" 
+          Margin="10,10,10,10" 
           ItemsSource="{Binding TopCryptoModel}"  
           AutoGenerateColumns="False" 
           SelectionMode="Single" 

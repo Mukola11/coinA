@@ -54,6 +54,7 @@ namespace coinA.ViewModels
             }
         }
 
+
         public CryptoDetailViewModel(NavigationStore navigationStore, string id)
         {
             _cryptoApiService = new CryptoApiService();
